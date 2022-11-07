@@ -1,92 +1,69 @@
 <template>
-  <v-app dark>
-    <v-navigation-drawer
-      v-model="drawer"
-      :mini-variant="miniVariant"
-      :clipped="clipped"
-      fixed
-      app
-    >
-      <v-list>
-        <v-list-item
-          v-for="(item, i) in items"
-          :key="i"
-          :to="item.to"
-          router
-          exact
-        >
-          <v-list-item-action>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-    <v-app-bar :clipped-left="clipped" fixed app>
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-btn icon @click.stop="miniVariant = !miniVariant">
-        <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
-      </v-btn>
-      <v-btn icon @click.stop="clipped = !clipped">
-        <v-icon>mdi-application</v-icon>
-      </v-btn>
-      <v-btn icon @click.stop="fixed = !fixed">
-        <v-icon>mdi-minus</v-icon>
-      </v-btn>
-      <v-toolbar-title>{{ title }}</v-toolbar-title>
-      <v-spacer />
-      <v-btn icon @click.stop="rightDrawer = !rightDrawer">
-        <v-icon>mdi-menu</v-icon>
-      </v-btn>
-    </v-app-bar>
-    <v-main>
-      <v-container>
-        <Nuxt />
-      </v-container>
-    </v-main>
-    <v-navigation-drawer v-model="rightDrawer" :right="right" temporary fixed>
-      <v-list>
-        <v-list-item @click.native="right = !right">
-          <v-list-item-action>
-            <v-icon light> mdi-repeat </v-icon>
-          </v-list-item-action>
-          <v-list-item-title>Switch drawer (click me)</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-    <v-footer :absolute="!fixed" app>
-      <span>&copy; {{ new Date().getFullYear() }}</span>
-    </v-footer>
-  </v-app>
+  <section class="page">
+    <section class="page__header">
+      <PageHeader />
+    </section>
+    <section class="page__content">
+      <aside class="page__content__aside">
+        <PageMenu />
+      </aside>
+      <main class="page__content__center">
+        <v-container>
+          <Nuxt />
+        </v-container>
+      </main>
+      <div class="page__content__progress">
+        <PageProgress />
+      </div>
+    </section>
+  </section>
 </template>
 
 <script>
+import PageHeader from '~/components/PageHeader.vue';
+import PageMenu from '~/components/PageMenu.vue';
+import PageProgress from '~/components/PageProgress.vue';
 export default {
-  name: 'DefaultLayout',
-  data() {
-    return {
-      clipped: false,
-      drawer: false,
-      fixed: false,
-      items: [
-        {
-          icon: 'mdi-apps',
-          title: 'Welcome',
-          to: '/',
-        },
-        {
-          icon: 'mdi-chart-bubble',
-          title: 'Inspire',
-          to: '/inspire',
-        },
-      ],
-      miniVariant: false,
-      right: true,
-      rightDrawer: false,
-      title: 'Vuetify.js',
-    }
-  },
+    name: "DefaultLayout",
+    data() {
+        return {};
+    },
+    components: { PageHeader, PageMenu, PageProgress }
 }
 </script>
+
+<style lang="scss" scoped>
+.page {
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 0.1fr;
+
+  &__header {
+    grid-area: 1 / 1 / 2 / 2;
+  }
+
+  &__content {
+    grid-area: 2 / 1 / 3 / 2;
+    display: grid;
+    overflow-x: auto;
+    grid-template-columns: 0.4fr 1fr 0.4fr;
+    grid-template-rows: 1fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+
+    &__aside {
+      grid-area: 1 / 1 / 2 / 2;
+    }
+
+    &__center {
+      overflow: auto;
+      grid-area: 1 / 2 / 2 / 3;
+    }
+
+    &__progress {
+      grid-area: 1 / 3 / 2 / 4; 
+    }
+  }
+}
+</style>
