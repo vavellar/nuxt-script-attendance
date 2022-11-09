@@ -2,7 +2,6 @@
     <div class="menu">
         <span v-if="$fetchState.pending">Carregando</span>
         <p v-else-if="$fetchState.error">An error occurred :(</p>
-        <p v-if="isLoading"> Loading..</p>
         <NuxtLink v-else :to="item.route"  v-for="item in menuItems" :key="item.name" class="menu__item">
             {{ item.name}}
         </NuxtLink>
