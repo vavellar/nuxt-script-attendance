@@ -7,8 +7,20 @@
     <v-divider class="my-10" />
     <footer>
       <div class="flex justify-between w-screen">
-        <NuxtLink class="p-2 text-blue-600 hover:bg-blue-200 rounded" :to="currentService.previousItem.route">{{ currentService.previousItem.name}}</NuxtLink>
-        <NuxtLink class="p-2 text-blue-600 hover:bg-blue-200 rounded" :to="currentService.nextItem.route">{{ currentService.nextItem.name }}</NuxtLink>
+        <NuxtLink 
+          v-if="currentService.previousItem" 
+          class="p-2 text-blue-600 hover:bg-blue-200 rounded" 
+          :to="currentService.previousItem.route"
+        >
+          {{ currentService.previousItem.name}}
+        </NuxtLink>
+        <NuxtLink 
+          v-if="currentService.nextItem" 
+          class="p-2 text-blue-600 hover:bg-blue-200 rounded" 
+          :to="currentService.nextItem.route"
+          >
+          {{ currentService.nextItem.name }}
+        </NuxtLink>
       </div>
     </footer>
   </div>
@@ -51,8 +63,10 @@ export default {
 
         currentService() {
           const currentService = this.menuItems.findIndex((item) => item.route === this.$route.params.slug)
-          const nextItem = this.menuItems[currentService + 1]
-          const previousItem = this.menuItems[currentService - 1]
+          const isLastItem = currentService === this.menuItems.length - 1
+          const isFirsItem = currentService === 0
+          const nextItem = isLastItem ? null : this.menuItems[currentService + 1]
+          const previousItem = isFirsItem ? null : this.menuItems[currentService - 1]
           return {
               nextItem,
               previousItem
