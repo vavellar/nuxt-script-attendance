@@ -1,31 +1,33 @@
 <template>
     <div class="menu">
-        <span v-if="$fetchState.pending">Carregando</span>
-        <p v-else-if="$fetchState.error">An error occurred :(</p>
-        <NuxtLink v-else :to="item.route"  v-for="item in menuItems" :key="item.name" class="menu__item">
+        <NuxtLink :to="item.route"  v-for="item in menuItems" :key="item.name" class="menu__item">
             {{ item.name}}
         </NuxtLink>
+        
     </div>
 </template>
 
 <script>
-
+import GetMenu from '@/apollo/queries/menu.gql'
 export default {
-    name: 'CopelScriptAttendancePageMenu',
-
     data() {
         return {
-            menuItems: null,
-        };
+            menu: {}
+        }
     },
 
-    async fetch() {
-      const response = await fetch(
-        'http://localhost:1337/api/menu?populate=*'
-      ).then(res => res.json())
-
-      this.menuItems = response.data.attributes.item
+    apollo: {
+        menu: {
+            prefetch: true,
+            query: GetMenu,
+        },
     },
+
+    computed: {
+        menuItems() {
+            return this.menu.data.attributes.item
+        },
+    }
 
 };
 </script>

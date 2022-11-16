@@ -1,0 +1,20 @@
+query GetService($slug: String!) {
+  servicos(filters: { slug: { eq: $slug}}) {
+    data {
+      attributes {
+        service_name
+        updatedAt
+        content {
+          ... on ComponentFieldField {
+            title
+            description
+            instructions {
+              title
+              description
+            }
+          }
+        }
+      }
+    }
+  }
+}

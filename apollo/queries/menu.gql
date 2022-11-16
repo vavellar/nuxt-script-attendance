@@ -1,0 +1,12 @@
+query GetMenu {
+  menu {
+    data {
+      attributes {
+        item {
+          route
+          name
+        }
+      }
+    }
+  }
+}

@@ -24,11 +24,8 @@ import PageHeader from '~/components/PageHeader.vue';
 import PageMenu from '~/components/PageMenu.vue';
 import PageProgress from '~/components/PageProgress.vue';
 export default {
-    name: "DefaultLayout",
-    data() {
-        return {};
-    },
-    components: { PageHeader, PageMenu, PageProgress }
+  name: "DefaultLayout",
+  components: { PageHeader, PageMenu, PageProgress },
 }
 </script>
 

@@ -1,39 +1,64 @@
 <template>
-  <div class="indexPage">
-
-      <h1 class="indexPage__title">
-        {{ service.data.attributes.service_name}}
-      </h1>
-    
-    <div v-for="item in service.data.attributes.content" class="indexPage__item">
-      <h1 class="indexPage__item__title">
-        {{ item.title }}
-      </h1>
-
-      <div v-for="content in getContent(item.description)">
-        <span>{{ content }}</span>
+  <div class="indexPage" v-if="service">
+    <h1 class="indexPage__title">
+      {{ service.service_name}}
+    </h1>
+    <PageContent :service="service"/>
+    <v-divider class="my-10" />
+    <footer>
+      <div class="flex justify-between w-screen">
+        <NuxtLink class="p-2 text-blue-600 hover:bg-blue-200 rounded" :to="currentService.previousItem.route">{{ currentService.previousItem.name}}</NuxtLink>
+        <NuxtLink class="p-2 text-blue-600 hover:bg-blue-200 rounded" :to="currentService.nextItem.route">{{ currentService.nextItem.name }}</NuxtLink>
       </div>
-    </div>
-
-    <pre>
-      {{ service}}
-    </pre>
+    </footer>
   </div>
 </template>
 
 <script>
+import GetService from '@/apollo/queries/service.gql'
+import GetMenu from '@/apollo/queries/menu.gql'
+import PageContent from '~/components/PageContent.vue';
 export default {
-  name: 'IndexPage',
-  async asyncData({ params, $axios }) {
-    const service = await $axios.$get(`http://localhost:1337/api/servicos/${params.slug}?populate=*`)
-    return { service }
-  },
+    name: "IndexPage",
+    components: { PageContent },
+    data() {
+        return {
+            servicos: {},
+            menu: {}
+        };
+    },
+    apollo: {
+      servicos: {
+          prefetch: true,
+          query: GetService,
+          variables() {
+              return { slug: this.$route.params.slug };
+          },
+      },
+      menu: {
+          prefetch: true,
+          query: GetMenu,
+      },
+    },
+    computed: {
+        service() {
+            return this.servicos.data && this.servicos.data[0].attributes;
+        },
 
-  methods: {
-    getContent(description) {
-      return description.split('\n')
+        menuItems() {
+          return this.menu.data.attributes.item
+        },
+
+        currentService() {
+          const currentService = this.menuItems.findIndex((item) => item.route === this.$route.params.slug)
+          const nextItem = this.menuItems[currentService + 1]
+          const previousItem = this.menuItems[currentService - 1]
+          return {
+              nextItem,
+              previousItem
+          }
+        }
     }
-  }
 }
 </script>
 
