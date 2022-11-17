@@ -2,17 +2,19 @@
     <div>
         <div class="py-2" v-for="content in service.content" :key="content.title">
             <h1 class="text-2xl">{{ content.title }}</h1>
-            <span class="py-3">
-                {{ content.description}}
-            </span>
+            <div class="p-2" v-for="content in getContent(content.description)">
+                    <span>
+                        {{ content.replace('-', '&bull;') }}
+                    </span>
+                </div>
 
             <div v-for="instruction in content.instructions" :key="instruction.title">
-                <h1 class="text-xl py-3">
+                <h1 class="text-2xl py-3">
                     {{ instruction.title}}
                 </h1>
-                <div class="py-2" v-for="content in getContent(instruction.description)">
+                <div class="p-2" v-for="content in getContent(instruction.description)">
                     <span>
-                        {{ content }}
+                        {{ content.replace('-', '&bull;') }}
                     </span>
                 </div>
             </div>

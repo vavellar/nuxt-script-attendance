@@ -5,22 +5,24 @@
     </h1>
     <PageContent :service="service"/>
     <v-divider class="my-10" />
-    <footer>
-      <div class="flex justify-between w-screen">
-        <NuxtLink 
-          v-if="currentService.previousItem" 
-          class="p-2 text-blue-600 hover:bg-blue-200 rounded" 
-          :to="currentService.previousItem.route"
-        >
-          {{ currentService.previousItem.name}}
-        </NuxtLink>
-        <NuxtLink 
-          v-if="currentService.nextItem" 
-          class="p-2 text-blue-600 hover:bg-blue-200 rounded" 
-          :to="currentService.nextItem.route"
+    <footer class="indexPage__footer">
+      <div class="indexPage__footer__item">
+        <div class="flex p-2 text-blue-600 hover:bg-blue-200 rounded"  v-if="currentService.previousItem">
+          <img class="pr-2" src="../assets/icons/arrow-left.svg" alt="">
+          <NuxtLink 
+            :to="currentService.previousItem.route"
           >
-          {{ currentService.nextItem.name }}
-        </NuxtLink>
+            {{ currentService.previousItem.name}}
+          </NuxtLink>
+        </div>
+        <div class="flex p-2 text-blue-600 hover:bg-blue-200 rounded"  v-if="currentService.nextItem">
+          <NuxtLink 
+            :to="currentService.nextItem.route"
+          >
+            {{ currentService.nextItem.name }}
+          </NuxtLink>
+          <img class="pl-2" src="../assets/icons/arrow-right.svg" alt="">
+        </div>
       </div>
     </footer>
   </div>
@@ -82,6 +84,13 @@ export default {
 
   &__title {
     font-size: 32px;
+  }
+
+  &__footer {
+    &__item {
+      display: flex;
+      justify-content: space-between;
+    }
   }
 
   &__item {
